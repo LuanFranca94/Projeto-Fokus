@@ -1,3 +1,4 @@
+// CAPTURA DE ELEMENTOS E CLASSES DENTRO DE VARIÁVEIS
 const html = document.querySelector('html');
 const focoBt = document.querySelector('.app__card-button--foco');
 const curtoBt = document.querySelector('.app__card-button--curto');
@@ -14,11 +15,15 @@ const musica = new Audio('/sons/luna-rise-part-one.mp3');
 const musicaPlay = new Audio ('/sons/play.wav');
 const musicaPause = new Audio('/sons/pause.mp3');
 const musicaFinalTimer = new Audio('/sons/beep.mp3');
-let tempoDecorridoEmSegundos = 1500;
+let tempoDecorridoEmSegundos = 10;
 let intervaloId = null;
+//------------------------------------------------------------------------------------
 
+//DEIXAR MÚSICA TOCANDO SEM PARAR
 musica.loop = true;
+//-------------------------------
 
+//VARIÁVEL QUE TROCA MÚSICA PARA TOCAR OU PAUSAR AO SELECIONAR O BOTÃO
 musicaInput.addEventListener('change', () => {
     if (musica.paused) {
         musica.play();
@@ -26,9 +31,11 @@ musicaInput.addEventListener('change', () => {
         musica.pause();
     }
 });
+//---------------------------------------------------------------------
 
+//ADICIONANDO O EVENTO DE CADA BOTÃO
 focoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 1500;
+    tempoDecorridoEmSegundos = 10;
     alterarContexto('foco');
     focoBt.classList.add('active');
 });
@@ -44,7 +51,9 @@ longoBt.addEventListener('click', () => {
     alterarContexto('descanso-longo');
     longoBt.classList.add('active');
 });
+//----------------------------------------
 
+//MUDANDO A FOTO, TEXTO E FUNDO DO BOTÃO E PÁGINA
 function alterarContexto(contexto) {
     mostrarTempo();
     botoes.forEach(function(contexto){
@@ -74,17 +83,29 @@ function alterarContexto(contexto) {
             break;
     }
 }
+//---------------------------------------------------------------------------------------------
 
+//CRIAÇÃO DA VARIÁVEL PARA CONTAGEM REGRESSIVA E GUARDANDO UMA FUNÇÃO DENTRO DELA 
 const contagemRegressiva = () => {
     if (tempoDecorridoEmSegundos <= 0) {
         musicaFinalTimer.play()
+        alert('Tempo Finalizado!')
+        const focoAtivo = html.getAttribute('data-contexto') == 'foco'
+        if (focoAtivo) {
+            const evento = new CustomEvent('FocoFinalizado')
+            document.dispatchEvent(evento)
+        }
+        iniciarOuPausarTxt.textContent = "Começar"
+        iconePlayPausa.setAttribute('src', '/imagens/play_arrow.png');
         zerar()
         return;
     }
     tempoDecorridoEmSegundos -= 1;
     mostrarTempo();
 }
+//--------------------------------------------------------
 
+//CRIAÇÃO DA FUNÇÃO QUE VAI INICIAR E PAUSAR O TIMER
 function iniciarOuPausar() {
     if (intervaloId) {
         iniciarOuPausarTxt.textContent = "Começar"
@@ -99,17 +120,27 @@ function iniciarOuPausar() {
     intervaloId = setInterval(contagemRegressiva, 1000);
 
 }
+//-------------------------------------------------------------------
 
+//CRIAÇÃO DA FUNÇÃO QUE VAI ZERAR O TIMER
 function zerar() {
     clearInterval(intervaloId);
     intervaloId = null;
 }
+//------------------------------------------
 
+//CRIAÇÃO DA FUNÇÃO QUE MOSTRA O TIMER NA TELA
 function mostrarTempo() {
     const tempo = new Date (tempoDecorridoEmSegundos * 1000);
     const tempoEmMinutos = tempo.toLocaleString('pt-Br', {minute: '2-digit', second: '2-digit'});
     timerNaTela.innerHTML = `${tempoEmMinutos}`;
 }
+//----------------------------------------------
 
+//MOSTRAR O TEMPO NA TELA
 mostrarTempo();
+//------------------------
+
+//EVENTO DE INICIAR E PAUSAR O TIMER 
 startPauseBt.addEventListener('click', iniciarOuPausar);
+//--------------------------------------------------------
