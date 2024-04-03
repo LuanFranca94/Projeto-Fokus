@@ -15,7 +15,7 @@ const musica = new Audio('/sons/luna-rise-part-one.mp3');
 const musicaPlay = new Audio ('/sons/play.wav');
 const musicaPause = new Audio('/sons/pause.mp3');
 const musicaFinalTimer = new Audio('/sons/beep.mp3');
-let tempoDecorridoEmSegundos = 10;
+let tempoDecorridoEmSegundos = 1500;
 let intervaloId = null;
 //------------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ musicaInput.addEventListener('change', () => {
 
 //ADICIONANDO O EVENTO DE CADA BOTÃO
 focoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 10;
+    tempoDecorridoEmSegundos = 1500;
     alterarContexto('foco');
     focoBt.classList.add('active');
 });
